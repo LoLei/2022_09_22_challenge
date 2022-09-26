@@ -1,15 +1,10 @@
 import os
 from pathlib import Path
 
-from problem_2.src.main import (
-    parse_input,
-    schedule_talks_to_tracks,
-    LUNCH_START,
-    LUNCH_END,
-    NETWORKING_START_LATEST,
-    parse_and_schedule,
-)
+from problem_2.src.input_parser import parse_input
 from problem_2.src.model.talk import Talk
+from problem_2.src.scheduler import schedule_talks_to_tracks, parse_and_schedule
+from problem_2.src.util.consts import LUNCH_START, LUNCH_END, NETWORKING_START_LATEST
 
 INPUT_STRS_1 = [
     "> Writing Fast Tests Against Enterprise Rails 60min",
