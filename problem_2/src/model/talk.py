@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from problem_2.src.util.consts import LUNCH_START
+from problem_2.src.util.timeutil import format_datetime
 
 
 @dataclass
@@ -23,7 +24,9 @@ class ScheduledTalk(Talk):
         duration = (
             "lightning" if self.length_minutes == 5 else f"{self.length_minutes}min"
         )
-        return "> " + f"{self.start_time} " + f"{self.name} " + duration
+        return (
+            "> " + f"{format_datetime(self.start_time)} " + f"{self.name} " + duration
+        )
 
     def __repr__(self) -> str:
         return (
@@ -50,8 +53,8 @@ class Track:
         string = ""
         for talk in self.talks_before_lunch:
             string += f"{talk}\n"
-        string += f"> {LUNCH_START} Lunch\n"
+        string += f"> {format_datetime(LUNCH_START)} Lunch\n"
         for talk in self.talks_after_lunch:
             string += f"{talk}\n"
-        string += f"> {self.networking_event_start} Networking Event"
+        string += f"> {format_datetime(self.networking_event_start)} Networking Event"
         return string
