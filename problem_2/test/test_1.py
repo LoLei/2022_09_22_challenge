@@ -74,7 +74,7 @@ def test_no_overlap_at_lunch() -> None:
 
     # Then
     for track in tracks:
-        assert all(x.end_time < LUNCH_START for x in track.talks_before_lunch)
+        assert all(x.end_time <= LUNCH_START for x in track.talks_before_lunch)
         assert all(x.start_time >= LUNCH_END for x in track.talks_after_lunch)
 
 
@@ -127,4 +127,4 @@ def test_e2e() -> None:
         number_scheduled_tracks += len(track.talks_after_lunch)
 
     assert number_scheduled_tracks == len(talks_input)
-    # TODO: Fix
+    # TODO: More assertions

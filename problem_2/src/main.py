@@ -55,32 +55,34 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
         if talk.scheduled:  # TODO: Maybe not needed since they're popped anyway
             continue
         scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
-        if scheduled_talk.end_time < LUNCH_START:
+        if scheduled_talk.end_time <= LUNCH_START:
             # Add the talk to the track if it fits, remove it from the list
             track.talks_before_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
             talk.scheduled = True
         else:
             # Otherwise, add it again to the end of the list to try again later
-            if talk.attempted_schedule:
-                break
             talk.attempted_schedule = True
             talks.append(talk)
+            # Prevent retrying the same over and over again
+            if talk.attempted_schedule:
+                break
 
     current_time = LUNCH_END
 
+    # Same as above but checking networking event instead of lunch
     while talks:
         talk = talks.pop(0)
         scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
-        if scheduled_talk.end_time < NETWORKING_START_LATEST:
+        if scheduled_talk.end_time <= NETWORKING_START_LATEST:
             track.talks_after_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
             talk.scheduled = True
         else:
-            if talk.attempted_schedule:
-                break
             talk.attempted_schedule = True
             talks.append(talk)
+            if talk.attempted_schedule:
+                break
 
     track.networking_event_start = (
         current_time
