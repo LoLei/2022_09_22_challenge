@@ -1,6 +1,6 @@
 from problem_2.src.main import (
     parse_input,
-    schedule_talks,
+    schedule_talks_to_tracks,
     LUNCH_START,
     LUNCH_END,
     NETWORKING_START_LATEST,
@@ -70,7 +70,7 @@ def test_no_overlap_at_lunch() -> None:
     talks_input = INPUT_TALKS_1
 
     # When
-    tracks = schedule_talks(talks_input)
+    tracks = schedule_talks_to_tracks(talks_input)
 
     # Then
     for track in tracks:
@@ -83,7 +83,7 @@ def test_networking_start_correctly() -> None:
     talks_input = INPUT_TALKS_1
 
     # When
-    tracks = schedule_talks(talks_input)
+    tracks = schedule_talks_to_tracks(talks_input)
 
     # Then
     assert all(
@@ -98,7 +98,7 @@ def test_no_breaks_between_talks() -> None:
     talks_input = INPUT_TALKS_1
 
     # When
-    tracks = schedule_talks(talks_input)
+    tracks = schedule_talks_to_tracks(talks_input)
 
     # Then
     for track in tracks:

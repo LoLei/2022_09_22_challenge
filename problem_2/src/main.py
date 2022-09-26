@@ -50,15 +50,18 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
     track = Track()
 
     while True:
+        # Take talk from the beginning
         talk = talks.pop(0)
         if talk.scheduled:  # TODO: Maybe not needed since they're popped anyway
             continue
         scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
         if scheduled_talk.end_time < LUNCH_START:
+            # Add the talk to the track if it fits, remove it from the list
             track.talks_before_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
             talk.scheduled = True
         else:
+            # Otherwise, add it again to the end of the list to try again later
             if talk.attempted_schedule:
                 break
             talk.attempted_schedule = True
@@ -80,12 +83,17 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
             talks.append(talk)
 
     track.networking_event_start = (
-        current_time if track.talks_after_lunch else NETWORKING_START_EARLIEST
+        current_time
+        if (
+            track.talks_after_lunch
+            and track.talks_after_lunch[-1].end_time >= NETWORKING_START_EARLIEST
+        )
+        else NETWORKING_START_EARLIEST
     )
     return track
 
 
-def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
+def schedule_talks_to_tracks(talks_unsorted: list[Talk]) -> list[Track]:
     talks_to_schedule = copy.deepcopy(talks_unsorted)  # TODO: Deepcopy maybe not needed
     tracks: list[Track] = []
 
@@ -96,11 +104,16 @@ def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
     return tracks
 
 
+def print_tracks(tracks: list[Track]) -> None:
+    for i, track in enumerate(tracks):
+        print(f"> Track {i + 1}")
+        print(f"{track}\n")
+
+
 def main():
     talks: list[Talk] = parse_input()
-    print(talks)
-    scheduled_talks = schedule_talks(talks)
-    print(scheduled_talks)
+    tracks = schedule_talks_to_tracks(talks)
+    print_tracks(tracks)
 
 
 if __name__ == "__main__":
