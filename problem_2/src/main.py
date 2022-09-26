@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+from datetime import date, datetime, time
 from pathlib import Path
 from typing import Optional
 import fileinput
 
-from problem_2.src.model.talk import Talk
+from problem_2.src.model.talk import Talk, ScheduledTalk, Track
 
 """
 Problem 2
@@ -12,6 +13,13 @@ Problem 2
 __author__ = "Lorenz Leitner"
 __version__ = "0.1.0"
 __license__ = "MIT"
+
+# Consts
+CONFERENCE_START = datetime.combine(date.today(), time(hour=9))
+LUNCH_START = datetime.combine(date.today(), time(hour=12))
+LUNCH_END = datetime.combine(date.today(), time(hour=13))
+NETWORKING_START_EARLIEST = datetime.combine(date.today(), time(hour=16))
+NETWORKING_START_LATEST = datetime.combine(date.today(), time(hour=17))
 
 
 def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
@@ -33,9 +41,16 @@ def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
     return [Talk(name=x[0], length_minutes=int(x[1])) for x in talks_replaced]
 
 
+def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
+    # TODO
+    return []
+
+
 def main():
     talks: list[Talk] = parse_input()
     print(talks)
+    scheduled_talks = schedule_talks(talks)
+    print(scheduled_talks)
 
 
 if __name__ == "__main__":
