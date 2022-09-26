@@ -31,9 +31,14 @@ def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
     # Assumption: Each line starts with '> '
     talks_input: list[str] = [line.strip()[2:] for line in input_strs if line.strip()]
 
+    # Filter lines that do not conform to format
+    talks_filtered: list[str] = [
+        line for line in talks_input if re.compile(".*(\\d+min|lightning)$").match(line)
+    ]
+
     # Replace lightning talks with 5 minutes and split at last space to separate minutes from name
     talks_lightning_replaced: list[list[str]] = [
-        t.replace("lightning", "5min").rsplit(" ", 1) for t in talks_input
+        t.replace("lightning", "5min").rsplit(" ", 1) for t in talks_filtered
     ]
 
     # Replace 'min' with nothing,

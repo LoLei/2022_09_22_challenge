@@ -65,6 +65,22 @@ def test_input_parsing() -> None:
     assert parsed_talks == expected_talks
 
 
+def test_input_parsing_handles_wrong_input() -> None:
+    # Given
+    input_strs = [
+        "> Talk A 60min",
+        "> Talk B 60minutes",
+        "> Talk C thunder",
+    ]
+
+    # When
+    parsed_talks = parse_input(input_strs)
+
+    # Then
+    expected_talks = [Talk("Talk A", 60)]
+    assert parsed_talks == expected_talks
+
+
 def test_no_overlap_at_lunch() -> None:
     # Given
     talks_input = INPUT_TALKS_1
@@ -113,7 +129,7 @@ def test_no_breaks_between_talks() -> None:
             assert talk1.end_time == talk2.start_time
 
 
-def test_e2e() -> None:
+def test_all_talks_are_scheduled() -> None:
     # Given
     talks_input = INPUT_TALKS_1
 
@@ -127,4 +143,3 @@ def test_e2e() -> None:
         number_scheduled_tracks += len(track.talks_after_lunch)
 
     assert number_scheduled_tracks == len(talks_input)
-    # TODO: More assertions
