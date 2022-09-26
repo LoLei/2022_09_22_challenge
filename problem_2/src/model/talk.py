@@ -24,8 +24,6 @@ class ScheduledTalk(Talk):
         )
         return "> " + f"{self.start_time} " + f"{self.name} " + duration
 
-    # TODO: Re-transform 5min to lightning
-
     def __repr__(self) -> str:
         return (
             "ScheduledTalk("

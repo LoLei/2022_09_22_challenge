@@ -114,5 +114,17 @@ def test_no_breaks_between_talks() -> None:
 
 
 def test_e2e() -> None:
-    # TODO
-    pass
+    # Given
+    talks_input = INPUT_TALKS_1
+
+    # When
+    tracks = schedule_talks_to_tracks(talks_input)
+
+    # Then
+    number_scheduled_tracks = 0
+    for track in tracks:
+        number_scheduled_tracks += len(track.talks_before_lunch)
+        number_scheduled_tracks += len(track.talks_after_lunch)
+
+    assert number_scheduled_tracks == len(talks_input)
+    # TODO: Fix
