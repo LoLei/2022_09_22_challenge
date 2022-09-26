@@ -1,9 +1,13 @@
+import os
+from pathlib import Path
+
 from problem_2.src.main import (
     parse_input,
     schedule_talks_to_tracks,
     LUNCH_START,
     LUNCH_END,
     NETWORKING_START_LATEST,
+    parse_and_schedule,
 )
 from problem_2.src.model.talk import Talk
 
@@ -58,7 +62,7 @@ def test_input_parsing() -> None:
     input_strs = INPUT_STRS_1
 
     # When
-    parsed_talks = parse_input(input_strs)
+    parsed_talks = parse_input(optional_input_strs=input_strs)
 
     # Then
     expected_talks = INPUT_TALKS_1
@@ -74,7 +78,7 @@ def test_input_parsing_handles_wrong_input() -> None:
     ]
 
     # When
-    parsed_talks = parse_input(input_strs)
+    parsed_talks = parse_input(optional_input_strs=input_strs)
 
     # Then
     expected_talks = [Talk("Talk A", 60)]
@@ -143,3 +147,38 @@ def test_all_talks_are_scheduled() -> None:
         number_scheduled_tracks += len(track.talks_after_lunch)
 
     assert number_scheduled_tracks == len(talks_input)
+
+
+def test_e2e_1() -> None:
+    # Given
+    path = os.path.dirname(__file__)
+    input_file = Path(path).parent / "resources" / "input_1.txt"
+
+    # When
+    tracks = parse_and_schedule(input_file)
+
+    # Then
+    number_scheduled_tracks = 0
+    for track in tracks:
+        number_scheduled_tracks += len(track.talks_before_lunch)
+        number_scheduled_tracks += len(track.talks_after_lunch)
+
+    assert number_scheduled_tracks == 19
+    # TODO: More assertions
+
+
+def test_e2e_2() -> None:
+    # Given
+    path = os.path.dirname(__file__)
+    input_file = Path(path).parent / "resources" / "input_2.txt"
+
+    # When
+    tracks = parse_and_schedule(input_file)
+
+    # Then
+    number_scheduled_tracks = 0
+    for track in tracks:
+        number_scheduled_tracks += len(track.talks_before_lunch)
+        number_scheduled_tracks += len(track.talks_after_lunch)
+
+    assert number_scheduled_tracks == 26

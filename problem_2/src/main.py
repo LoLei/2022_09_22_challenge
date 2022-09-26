@@ -3,6 +3,7 @@ import copy
 import fileinput
 import re
 from datetime import date, datetime, time
+from pathlib import Path
 from typing import Optional
 
 from problem_2.src.model.talk import Talk, ScheduledTalk, Track
@@ -23,9 +24,23 @@ NETWORKING_START_EARLIEST = datetime.combine(date.today(), time(hour=16))
 NETWORKING_START_LATEST = datetime.combine(date.today(), time(hour=17))
 
 
-def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
+def parse_input(
+    optional_input_strs: Optional[list[str]] = None,
+    file_location: Optional[Path] = None,
+) -> list[Talk]:
+
     # Inject dependency for testing
-    input_strs = optional_input_strs if optional_input_strs else fileinput.input()
+    file_lines: list[str] = []
+    if file_location:
+        with open(file_location) as file:
+            file_lines = file.readlines()
+    input_strs = (
+        optional_input_strs
+        if optional_input_strs
+        else file_lines
+        if file_lines
+        else fileinput.input()
+    )
 
     # Read from input and clean each line, remove blank lines
     # Assumption: Each line starts with '> '
@@ -117,9 +132,13 @@ def print_tracks(tracks: list[Track]) -> None:
         print(f"{track}\n")
 
 
+def parse_and_schedule(input_file: Optional[Path] = None) -> list[Track]:
+    talks: list[Talk] = parse_input(file_location=input_file)
+    return schedule_talks_to_tracks(talks)
+
+
 def main():
-    talks: list[Talk] = parse_input()
-    tracks = schedule_talks_to_tracks(talks)
+    tracks = parse_and_schedule()
     print_tracks(tracks)
 
 
