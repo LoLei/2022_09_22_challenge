@@ -3,13 +3,14 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from typing import Optional
 
+from problem_2.src.util.consts import LUNCH_START
+
 
 @dataclass
 class Talk:
     name: str
     length_minutes: int
     attempted_schedule: bool = False
-    scheduled: bool = False
 
 
 @dataclass
@@ -49,7 +50,7 @@ class Track:
         string = ""
         for talk in self.talks_before_lunch:
             string += f"{talk}\n"
-        string += f"> 12PM Lunch\n"  # TODO: Cannot use LUNCH_START from main due to circular import
+        string += f"> {LUNCH_START} Lunch\n"
         for talk in self.talks_after_lunch:
             string += f"{talk}\n"
         string += f"> {self.networking_event_start} Networking Event"

@@ -2,11 +2,17 @@
 import copy
 import fileinput
 import re
-from datetime import date, datetime, time
 from pathlib import Path
 from typing import Optional
 
 from problem_2.src.model.talk import Talk, ScheduledTalk, Track
+from problem_2.src.util.consts import (
+    CONFERENCE_START,
+    LUNCH_START,
+    LUNCH_END,
+    NETWORKING_START_LATEST,
+    NETWORKING_START_EARLIEST,
+)
 
 """
 Problem 2
@@ -16,19 +22,11 @@ __author__ = "Lorenz Leitner"
 __version__ = "0.1.0"
 __license__ = "MIT"
 
-# Consts
-CONFERENCE_START = datetime.combine(date.today(), time(hour=9))
-LUNCH_START = datetime.combine(date.today(), time(hour=12))
-LUNCH_END = datetime.combine(date.today(), time(hour=13))
-NETWORKING_START_EARLIEST = datetime.combine(date.today(), time(hour=16))
-NETWORKING_START_LATEST = datetime.combine(date.today(), time(hour=17))
-
 
 def parse_input(
     optional_input_strs: Optional[list[str]] = None,
     file_location: Optional[Path] = None,
 ) -> list[Talk]:
-
     # Inject dependency for testing
     file_lines: list[str] = []
     if file_location:
@@ -72,14 +70,11 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
     while talks:
         # Take talk from the beginning
         talk = talks.pop(0)
-        if talk.scheduled:  # TODO: Maybe not needed since they're popped anyway
-            continue
         scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
         if scheduled_talk.end_time <= LUNCH_START:
             # Add the talk to the track if it fits, remove it from the list
             track.talks_before_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
-            talk.scheduled = True
         else:
             # Otherwise, add it again to the end of the list to try again later
             talk.attempted_schedule = True
@@ -97,7 +92,6 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
         if scheduled_talk.end_time <= NETWORKING_START_LATEST:
             track.talks_after_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
-            talk.scheduled = True
         else:
             talk.attempted_schedule = True
             talks.append(talk)
@@ -116,7 +110,8 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
 
 
 def schedule_talks_to_tracks(talks_unsorted: list[Talk]) -> list[Track]:
-    talks_to_schedule = copy.deepcopy(talks_unsorted)  # TODO: Deepcopy maybe not needed
+    # Deepcopy may be not needed, used in case preservation of original argument is desired
+    talks_to_schedule = copy.deepcopy(talks_unsorted)
     tracks: list[Track] = []
 
     while talks_to_schedule:
