@@ -8,6 +8,8 @@ from typing import Optional
 class Talk:
     name: str
     length_minutes: int
+    attempted_schedule: bool = False
+    scheduled: bool = False
 
 
 @dataclass

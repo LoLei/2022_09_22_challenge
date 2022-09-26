@@ -45,30 +45,58 @@ def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
     return [Talk(name=t[0], length_minutes=int(t[1])) for t in talks_minute_replaced]
 
 
-def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
-    talks_to_schedule = copy.deepcopy(talks_unsorted)
-    tracks: list[Track] = [Track()]
-
+def _append_talks_to_track(talks: list[Talk]) -> Track:
     current_time = CONFERENCE_START
-    current_track = tracks[0]
+    track = Track()
 
-    while talks_to_schedule:
-        talk = talks_to_schedule.pop(0)
+    while True:
+        talk = talks.pop(0)
+        if talk.scheduled:  # TODO: Maybe not needed since they're popped anyway
+            continue
         scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
         if scheduled_talk.end_time < LUNCH_START:
-            current_track.talks_before_lunch.append(scheduled_talk)
+            track.talks_before_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
+            talk.scheduled = True
+        else:
+            if talk.attempted_schedule:
+                break
+            talk.attempted_schedule = True
+            talks.append(talk)
 
-    while talks_to_schedule:
-        talk = talks_to_schedule.pop(0)
+    current_time = LUNCH_END
+
+    while talks:
+        talk = talks.pop(0)
         scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
         if scheduled_talk.end_time < NETWORKING_START_LATEST:
-            current_track.talks_after_lunch.append(scheduled_talk)
+            track.talks_after_lunch.append(scheduled_talk)
             current_time = scheduled_talk.end_time
+            talk.scheduled = True
+        else:
+            if talk.attempted_schedule:
+                break
+            talk.attempted_schedule = True
+            talks.append(talk)
+
+    track.networking_event_start = (
+        current_time if track.talks_after_lunch else NETWORKING_START_EARLIEST
+    )
+    return track
+
+
+def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
+    talks_to_schedule = copy.deepcopy(talks_unsorted)  # TODO: Deepcopy maybe not needed
+    tracks: list[Track] = []
+
+    track = _append_talks_to_track(talks_to_schedule)
+    tracks.append(track)
 
     if len(talks_to_schedule) != 0:
         # Create second track
-        tracks.append(Track())
+        # tracks.append(Track())
+        # TODO
+        pass
 
     return tracks
 

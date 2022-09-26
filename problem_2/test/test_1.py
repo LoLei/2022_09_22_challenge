@@ -67,11 +67,7 @@ def test_input_parsing() -> None:
 
 def test_no_overlap_at_lunch() -> None:
     # Given
-    talks_input = [
-        Talk(name="Talk Two", length_minutes=5),
-        Talk(name="Talk Three", length_minutes=25),
-        Talk(name="Talk One", length_minutes=10),
-    ]
+    talks_input = INPUT_TALKS_1
 
     # When
     tracks = schedule_talks(talks_input)
@@ -79,16 +75,12 @@ def test_no_overlap_at_lunch() -> None:
     # Then
     for track in tracks:
         assert all(x.end_time < LUNCH_START for x in track.talks_before_lunch)
-        assert all(x.start_time > LUNCH_END for x in track.talks_after_lunch)
+        assert all(x.start_time >= LUNCH_END for x in track.talks_after_lunch)
 
 
 def test_networking_start_correctly() -> None:
     # Given
-    talks_input = [
-        Talk(name="Talk Two", length_minutes=5),
-        Talk(name="Talk Three", length_minutes=25),
-        Talk(name="Talk One", length_minutes=10),
-    ]
+    talks_input = INPUT_TALKS_1
 
     # When
     tracks = schedule_talks(talks_input)
@@ -103,11 +95,7 @@ def test_networking_start_correctly() -> None:
 
 def test_no_breaks_between_talks() -> None:
     # Given
-    talks_input = [
-        Talk(name="Talk Two", length_minutes=5),
-        Talk(name="Talk Three", length_minutes=25),
-        Talk(name="Talk One", length_minutes=10),
-    ]
+    talks_input = INPUT_TALKS_1
 
     # When
     tracks = schedule_talks(talks_input)
