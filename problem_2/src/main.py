@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 import fileinput
 
-from model.talk import Talk
+from problem_2.src.model.talk import Talk
 
 """
 Problem 2

@@ -2,5 +2,6 @@
 
 # TODO: Use GitHub Actions
 
-black --check .
-mypy .
+black --check . &&
+    mypy . &&
+    python -m pytest
