@@ -69,7 +69,7 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
     current_time = CONFERENCE_START
     track = Track()
 
-    while True:
+    while talks:
         # Take talk from the beginning
         talk = talks.pop(0)
         if talk.scheduled:  # TODO: Maybe not needed since they're popped anyway
