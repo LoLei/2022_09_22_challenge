@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import copy
 import fileinput
+import re
 from datetime import date, datetime, time
 from typing import Optional
 
@@ -30,15 +31,18 @@ def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
     # Assumption: Each line starts with '> '
     talks_input: list[str] = [line.strip()[2:] for line in input_strs if line.strip()]
 
-    # Replace lightning talks with 5 minutes,
-    # replace 'min' with nothing,
-    talks_replaced: list[list[str]] = [
-        ti.replace("lightning", "5min").replace("min", "").rsplit(" ", 1)
-        for ti in talks_input
+    # Replace lightning talks with 5 minutes and split at last space to separate minutes from name
+    talks_lightning_replaced: list[list[str]] = [
+        t.replace("lightning", "5min").rsplit(" ", 1) for t in talks_input
+    ]
+
+    # Replace 'min' with nothing,
+    talks_minute_replaced: list[list[str]] = [
+        [t[0], re.sub("min$", "", t[1])] for t in talks_lightning_replaced
     ]
 
     # Transform to data class and return
-    return [Talk(name=x[0], length_minutes=int(x[1])) for x in talks_replaced]
+    return [Talk(name=t[0], length_minutes=int(t[1])) for t in talks_minute_replaced]
 
 
 def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
