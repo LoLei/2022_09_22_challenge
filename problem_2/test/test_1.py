@@ -1,5 +1,3 @@
-import pytest
-
 from problem_2.src.main import (
     parse_input,
     schedule_talks,

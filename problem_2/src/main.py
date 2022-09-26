@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-from datetime import date, datetime, time
-from pathlib import Path
-from typing import Optional
+import copy
 import fileinput
+from datetime import date, datetime, time
+from typing import Optional
 
 from problem_2.src.model.talk import Talk, ScheduledTalk, Track
 
@@ -42,8 +42,31 @@ def parse_input(optional_input_strs: Optional[list[str]] = None) -> list[Talk]:
 
 
 def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
-    # TODO
-    return []
+    talks_to_schedule = copy.deepcopy(talks_unsorted)
+    tracks: list[Track] = [Track()]
+
+    current_time = CONFERENCE_START
+    current_track = tracks[0]
+
+    while talks_to_schedule:
+        talk = talks_to_schedule.pop(0)
+        scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
+        if scheduled_talk.end_time < LUNCH_START:
+            current_track.talks_before_lunch.append(scheduled_talk)
+            current_time = scheduled_talk.end_time
+
+    while talks_to_schedule:
+        talk = talks_to_schedule.pop(0)
+        scheduled_talk = ScheduledTalk(start_time=current_time, talk=talk)
+        if scheduled_talk.end_time < NETWORKING_START_LATEST:
+            current_track.talks_after_lunch.append(scheduled_talk)
+            current_time = scheduled_talk.end_time
+
+    if len(talks_to_schedule) != 0:
+        # Create second track
+        tracks.append(Track())
+
+    return tracks
 
 
 def main():

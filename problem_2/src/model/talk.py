@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
 
 
 @dataclass
@@ -32,6 +33,6 @@ class ScheduledTalk(Talk):
 
 @dataclass
 class Track:
-    talks_before_lunch: list[ScheduledTalk]
-    talks_after_lunch: list[ScheduledTalk]
-    networking_event_start: datetime
+    talks_before_lunch: list[ScheduledTalk] = field(default_factory=lambda: [])
+    talks_after_lunch: list[ScheduledTalk] = field(default_factory=lambda: [])
+    networking_event_start: Optional[datetime] = None  # Filled at a later time
