@@ -89,14 +89,9 @@ def schedule_talks(talks_unsorted: list[Talk]) -> list[Track]:
     talks_to_schedule = copy.deepcopy(talks_unsorted)  # TODO: Deepcopy maybe not needed
     tracks: list[Track] = []
 
-    track = _append_talks_to_track(talks_to_schedule)
-    tracks.append(track)
-
-    if len(talks_to_schedule) != 0:
-        # Create second track
-        # tracks.append(Track())
-        # TODO
-        pass
+    while talks_to_schedule:
+        track = _append_talks_to_track(talks_to_schedule)
+        tracks.append(track)
 
     return tracks
 

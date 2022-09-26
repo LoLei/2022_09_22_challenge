@@ -111,3 +111,8 @@ def test_no_breaks_between_talks() -> None:
             talk1 = track.talks_after_lunch[i]
             talk2 = track.talks_after_lunch[i + 1]
             assert talk1.end_time == talk2.start_time
+
+
+def test_e2e() -> None:
+    # TODO
+    pass
