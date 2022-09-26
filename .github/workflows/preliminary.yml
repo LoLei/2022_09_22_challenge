@@ -1,0 +1,16 @@
+name: Preliminary
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  preliminary-checks:
+    uses: LoLei/util/.github/workflows/python-preliminary.yml@main
+    with:
+      python-version: '3.9.2'
+      format: true
+      typecheck: true
+      test: true
