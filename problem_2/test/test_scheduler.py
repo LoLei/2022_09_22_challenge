@@ -2,8 +2,13 @@ import os
 from pathlib import Path
 
 from problem_2.src.scheduler import schedule_talks_to_tracks, parse_and_schedule
-from problem_2.src.util.consts import LUNCH_START, LUNCH_END, NETWORKING_START_LATEST
-from problem_2.test.consts import INPUT_TALKS_1
+from problem_2.src.util.consts import (
+    LUNCH_START,
+    LUNCH_END,
+    NETWORKING_START_LATEST,
+    NETWORKING_START_EARLIEST,
+)
+from problem_2.test.consts import INPUT_TALKS_1, INPUT_TALKS_2
 
 
 def test_no_overlap_at_lunch() -> None:
@@ -32,6 +37,25 @@ def test_networking_start_correctly() -> None:
         for track in tracks
         if track.talks_after_lunch
     )
+    assert all(
+        (
+            track.networking_event_start >= NETWORKING_START_EARLIEST
+            and track.networking_event_start <= NETWORKING_START_LATEST
+        )
+        for track in tracks
+    )
+
+
+def test_networking_event_has_same_start_time_on_all_tracks() -> None:
+    # Given
+    talks_input = INPUT_TALKS_2
+
+    # When
+    tracks = schedule_talks_to_tracks(talks_input)
+
+    # Then
+    networking_event_start_times = [track.networking_event_start for track in tracks]
+    assert len(set(networking_event_start_times)) == 1
 
 
 def test_no_breaks_between_talks() -> None:

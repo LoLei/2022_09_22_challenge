@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from typing import Optional
 
-from problem_2.src.model.talk import Talk
+from problem_2.src.model.model import Talk
 
 
 def parse_input(

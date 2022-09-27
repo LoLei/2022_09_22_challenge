@@ -1,5 +1,5 @@
 from problem_2.src.input_parser import parse_input
-from problem_2.src.model.talk import Talk
+from problem_2.src.model.model import Talk
 from problem_2.test.consts import INPUT_STRS_1, INPUT_TALKS_1
 
 

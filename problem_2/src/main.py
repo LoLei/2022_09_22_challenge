@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from problem_2.src.model.talk import Track
+from problem_2.src.model.model import Track
 from problem_2.src.scheduler import parse_and_schedule
 
 """

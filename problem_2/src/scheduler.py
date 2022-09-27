@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 from problem_2.src.input_parser import parse_input
-from problem_2.src.model.talk import Talk, Track, ScheduledTalk
+from problem_2.src.model.model import Talk, Track, ScheduledTalk
 from problem_2.src.util.consts import (
     LUNCH_START,
     NETWORKING_START_LATEST,
@@ -16,7 +16,7 @@ from problem_2.src.util.consts import (
 
 def _do_schedule(
     talks: list[Talk], track: Track, criteria_time: datetime, current_time: datetime
-) -> None:
+) -> datetime:
     """
     This method schedules a list of talks to a track,
     either before lunch or before the latest networking event start time.
@@ -42,6 +42,7 @@ def _do_schedule(
             # Prevent retrying the same over and over again
             if talk.attempted_schedule:
                 break
+    return current_time
 
 
 def _append_talks_to_track(talks: list[Talk]) -> Track:
@@ -54,7 +55,7 @@ def _append_talks_to_track(talks: list[Talk]) -> Track:
 
     current_time = LUNCH_END
 
-    _do_schedule(
+    current_time = _do_schedule(
         talks=talks,
         track=track,
         criteria_time=NETWORKING_START_LATEST,
@@ -80,6 +81,13 @@ def schedule_talks_to_tracks(talks_unsorted: list[Talk]) -> list[Track]:
     while talks_to_schedule:
         track = _append_talks_to_track(talks_to_schedule)
         tracks.append(track)
+
+    # Make networking event start time the same for all tracks, i.e. the latest of all tracks
+    networking_event_start_time_latest_scheduled: datetime = max(
+        [track.networking_event_start for track in tracks]
+    )
+    for track in tracks:
+        track.networking_event_start = networking_event_start_time_latest_scheduled
 
     return tracks
 

@@ -1,4 +1,4 @@
-from problem_2.src.model.talk import Talk
+from problem_2.src.model.model import Talk
 
 INPUT_STRS_1 = [
     "> Writing Fast Tests Against Enterprise Rails 60min",
@@ -43,4 +43,34 @@ INPUT_TALKS_1 = [
     Talk("Ruby on Rails Legacy App Maintenance", 60),
     Talk("A World Without HackerNews", 30),
     Talk("User Interface CSS in Rails Apps", 30),
+]
+
+
+INPUT_TALKS_2 = [
+    Talk("A", 30),
+    Talk("B", 15),
+    Talk("C", 60),
+    Talk("D", 5),
+    Talk("E", 10),
+    Talk("F", 5),
+    Talk("G", 90),
+    Talk("H", 75),
+    Talk("I", 55),
+    Talk("J", 27),
+    Talk("K", 30),
+    Talk("L", 15),
+    Talk("M", 10),
+    Talk("N", 66),
+    Talk("O", 25),
+    Talk("P", 17),
+    Talk("Q", 34),
+    Talk("R", 50),
+    Talk("S", 5),
+    Talk("T", 80),
+    Talk("U", 10),
+    Talk("V", 25),
+    Talk("W", 30),
+    Talk("X", 55),
+    Talk("Y", 15),
+    Talk("Z", 10),
 ]
