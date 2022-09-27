@@ -14,11 +14,11 @@ pyenv local 2022_09_22_challenge
 
 ```
 # Build
-docker build -f Dockerfile -t ghcr.io/lolei/2022_09_22_challenge:0.0.1 .
+docker build -f Dockerfile -t ghcr.io/lolei/2022_09_22_challenge:0.1.0 .
 # Or pull
-docker pull ghcr.io/lolei/2022_09_22_challenge:0.0.1
+docker pull ghcr.io/lolei/2022_09_22_challenge:0.1.0
 # Run
-docker run ghcr.io/lolei/2022_09_22_challenge:0.0.1
+docker run ghcr.io/lolei/2022_09_22_challenge:0.1.0
 ```
 
 ## Assumptions
