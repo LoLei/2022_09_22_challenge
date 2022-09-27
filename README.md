@@ -28,7 +28,3 @@ docker run ghcr.io/lolei/2022_09_22_challenge:0.1.1
 - No numbers in talk names
 - Input lines generally conform to format, although some cleaning is performed
 - There can be an infinite number of tracks, not only two
-
-## TODOs
-
-- Networking event start time should be the same in all tracks
