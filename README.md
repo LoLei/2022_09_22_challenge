@@ -8,6 +8,7 @@
 pyenv install 3.9.2
 pyenv virtualenv 3.9.2 2022_09_22_challenge
 pyenv local 2022_09_22_challenge
+./entrypoint.sh
 ```
 
 ### Docker
