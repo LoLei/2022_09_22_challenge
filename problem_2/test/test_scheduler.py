@@ -39,8 +39,9 @@ def test_networking_start_correctly() -> None:
     )
     assert all(
         (
-            track.networking_event_start >= NETWORKING_START_EARLIEST
-            and track.networking_event_start <= NETWORKING_START_LATEST
+            NETWORKING_START_EARLIEST
+            <= track.networking_event_start
+            <= NETWORKING_START_LATEST
         )
         for track in tracks
     )
